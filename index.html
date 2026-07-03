@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freelancer IT — Aplikacje, Automatyzacja i AI dla biznesu</title>
+<meta name="description" content="Projektuję aplikacje webowe, tworzę boty i optymalizuję pracę z danymi, wykorzystując technologie AI, aby oszczędzić Twój czas i budżet.">
+<meta name="theme-color" content="#0A0A10">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%229%22%20fill%3D%22%230A0A10%22/%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2229%22%20height%3D%2229%22%20rx%3D%227.5%22%20fill%3D%22none%22%20stroke%3D%22%237C5CFC%22%20stroke-width%3D%221.6%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2221.5%22%20font-family%3D%22monospace%22%20font-weight%3D%22700%22%20font-size%3D%2213%22%20fill%3D%22%237C5CFC%22%20text-anchor%3D%22middle%22%3E%26gt%3B_%3C/text%3E%3C/svg%3E">
+
+<meta property="og:title" content="Freelancer IT — Aplikacje, Automatyzacja i AI dla biznesu">
+<meta property="og:description" content="Projektuję aplikacje webowe, tworzę boty i optymalizuję pracę z danymi, wykorzystując technologie AI.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          base: '#0A0A10',
+          surface: '#13131B',
+          surface2: '#191924',
+          line: '#24242F',
+          ink: {
+            DEFAULT: '#F3F2F8',
+            dim: '#9C9AB0',
+            mute: '#83809C',
+          },
+          accent: {
+            violet: '#7C5CFC',
+            blue: '#4F8CFF',
+            green: '#34D399',
+          },
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          body: ['"Inter"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; }
+
+  .text-gradient {
+    background-image: linear-gradient(90deg, #7C5CFC, #4F8CFF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(124, 92, 252, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 92, 252, 0.08) 1px, transparent 1px);
+    background-size: 44px 44px;
+    background-position: center top;
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+  }
+
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    margin-left: 2px;
+    background: #7C5CFC;
+    vertical-align: -2px;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+  .portfolio-card {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .portfolio-card.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .portfolio-frame {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(36, 36, 47, 0.95);
+    background: linear-gradient(180deg, rgba(19, 19, 27, 0.96), rgba(10, 10, 16, 0.96));
+  }
+
+  .portfolio-frame--preview {
+    aspect-ratio: 16 / 10;
+  }
+
+  .portfolio-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(124, 92, 252, 0.22), transparent 35%, rgba(79, 140, 255, 0.14));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .portfolio-frame:hover::before { opacity: 1; }
+
+  .portfolio-media {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.35s ease, transform 0.7s ease;
+  }
+
+  .portfolio-frame:hover .portfolio-media {
+    transform: scale(1.02);
+  }
+
+  .portfolio-shell {
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  }
+
+  .portfolio-shell:hover {
+    border-color: rgba(124, 92, 252, 0.45);
+  }
+
+  .portfolio-empty {
+    background:
+      radial-gradient(circle at top left, rgba(124, 92, 252, 0.16), transparent 42%),
+      radial-gradient(circle at bottom right, rgba(79, 140, 255, 0.14), transparent 38%),
+      linear-gradient(180deg, rgba(19, 19, 27, 0.96), rgba(10, 10, 16, 0.96));
+  }
+
+  .portfolio-badge {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .gallery-modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .gallery-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gallery-modal-panel {
+    transform: translateY(18px) scale(0.98);
+    transition: transform 0.25s ease;
+  }
+
+  .gallery-modal.is-open .gallery-modal-panel {
+    transform: translateY(0) scale(1);
+  }
+
+  .gallery-modal-image {
+    max-height: calc(100vh - 10rem);
+    border-radius: 1.25rem;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+  }
+
+  .gallery-modal-image.is-changing {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  .portfolio-media {
+    border-radius: 1rem;
+  }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: #0A0A10; }
+  ::-webkit-scrollbar-thumb { background: #24242F; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #7C5CFC; }
+
+  ::selection { background: rgba(124, 92, 252, 0.35); color: #ffffff; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .terminal-cursor { animation: none; }
+    .reveal { transition: none; }
+  }
+</style>
+</head>
+
+<body class="bg-base font-body text-ink antialiased">
+
+<!-- ============ NAV ============ -->
+<header class="fixed top-0 inset-x-0 z-50 border-b border-line/60 bg-base/80 backdrop-blur-md">
+  <nav class="max-w-6xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a href="#hero" class="flex items-center gap-2.5 group">
+      <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-violet/10 border border-accent-violet/30 font-mono text-sm text-accent-violet group-hover:bg-accent-violet/20 transition-colors">&gt;_</span>
+      <span class="flex flex-col leading-none">
+        <span class="font-display font-semibold text-ink text-sm tracking-tight">Freelance Developer</span>
+        <span class="hidden sm:block font-mono text-[11px] text-ink-mute">web · boty · dane</span>
+      </span>
+    </a>
+
+    <a href="#kontakt" class="inline-flex items-center gap-2 rounded-full bg-accent-violet px-4 sm:px-5 py-2.5 text-sm font-semibold text-white hover:bg-accent-violet/90 transition-colors shadow-lg shadow-accent-violet/20">
+      Skontaktuj się
+    </a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section id="hero" class="relative overflow-hidden scroll-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-32 border-b border-line/60">
+  <div class="pointer-events-none absolute inset-0 bg-grid"></div>
+  <div class="pointer-events-none absolute -top-40 right-0 h-[32rem] w-[32rem] rounded-full bg-accent-violet/20 blur-[120px]"></div>
+  <div class="pointer-events-none absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-accent-blue/10 blur-[100px]"></div>
+
+  <div class="relative max-w-6xl mx-auto px-6 lg:px-8 grid lg:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
+    <div>
+      <span class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 font-mono text-xs text-ink-dim">
+        <span class="h-1.5 w-1.5 rounded-full bg-accent-green animate-pulse"></span>
+        Dostępny na nowe projekty
+      </span>
+
+      <h1 class="mt-6 font-display font-semibold text-4xl sm:text-5xl lg:text-6xl leading-[1.08] tracking-tight text-ink">
+        Nowoczesne oprogramowanie i <span class="text-gradient">automatyzacja</span> dla Twojego biznesu
+      </h1>
+
+      <p class="mt-6 text-lg text-ink-dim leading-relaxed max-w-xl">
+        Projektuję aplikacje webowe, tworzę boty i optymalizuję pracę z danymi, wykorzystując technologie AI, aby oszczędzić Twój czas i budżet.
+      </p>
+
+      <div class="mt-9 flex flex-wrap items-center gap-4">
+        <a href="#portfolio" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent-violet to-accent-blue px-6 py-3.5 text-sm font-semibold text-white hover:brightness-110 hover:-translate-y-0.5 transition-all shadow-lg shadow-accent-violet/40">
+          Zobacz portfolio
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+        <a href="#kontakt" class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-6 py-3.5 text-sm font-semibold text-ink hover:border-accent-violet/60 hover:text-accent-violet transition-colors">
+          Skontaktuj się
+        </a>
+      </div>
+
+      <a href="#o-mnie" class="mt-14 hidden lg:inline-flex items-center gap-2 font-mono text-xs text-ink-mute hover:text-accent-violet transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+        przewiń, aby poznać szczegóły
+      </a>
+    </div>
+
+    <div class="relative">
+      <div class="rounded-2xl border border-line bg-surface shadow-2xl shadow-black/40 overflow-hidden">
+        <div class="flex items-center gap-2 border-b border-line bg-surface2 px-4 py-3">
+          <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+          <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+          <span class="ml-3 font-mono text-xs text-ink-mute">wdrozenie.sh</span>
+        </div>
+        <div class="p-5 font-mono text-[13px] leading-relaxed min-h-[230px]" id="terminal-output"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ O MNIE ============ -->
+<section id="o-mnie" class="scroll-mt-24 py-24 lg:py-32 border-b border-line/60">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-start">
+    <div class="reveal">
+      <span class="font-mono text-xs uppercase tracking-wider text-accent-violet">// O mnie</span>
+      <h2 class="mt-3 font-display font-semibold text-3xl sm:text-4xl text-ink tracking-tight">Piszę kod, który pracuje za Ciebie</h2>
+      <p class="mt-6 text-ink-dim leading-relaxed text-[15px] sm:text-base">
+        Jestem studentem 3. roku informatyki. Tworzę oprogramowanie i narzędzia automatyzujące dla małego i średniego biznesu. Łączę nowoczesne technologie webowe z rozwiązaniami opartymi na sztucznej inteligencji, co pozwala mi dostarczać wysokiej jakości projekty w krótkim czasie i zoptymalizowanym budżecie. Gwarantuję przejrzysty proces współpracy, szybkie wdrożenie oraz wsparcie techniczne po zakończeniu zlecenia.
+      </p>
+
+      <div class="mt-9 grid grid-cols-3 gap-6 max-w-sm">
+        <div>
+          <div class="font-display text-2xl font-semibold text-ink">3.</div>
+          <div class="font-mono text-xs text-ink-mute mt-1">rok studiów</div>
+        </div>
+        <div>
+          <div class="font-display text-2xl font-semibold text-ink">AI</div>
+          <div class="font-mono text-xs text-ink-mute mt-1">w każdym projekcie</div>
+        </div>
+        <div>
+          <div class="font-display text-2xl font-semibold text-ink">24h</div>
+          <div class="font-mono text-xs text-ink-mute mt-1">czas odpowiedzi</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal rounded-2xl border border-line bg-surface overflow-hidden">
+      <div class="flex items-center gap-2 border-b border-line bg-surface2 px-4 py-3">
+        <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+        <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+        <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+        <span class="ml-3 font-mono text-xs text-ink-mute">stack.json</span>
+      </div>
+      <pre class="p-5 sm:p-6 font-mono text-[13px] leading-7 overflow-x-auto"><code><span class="text-ink-mute">{</span>
+  <span class="text-accent-blue">"frontend"</span><span class="text-ink-mute">:</span> [<span class="text-accent-green">"React"</span>, <span class="text-accent-green">"HTML/CSS"</span>],
+  <span class="text-accent-blue">"backend"</span><span class="text-ink-mute">:</span> [<span class="text-accent-green">"Laravel"</span>, <span class="text-accent-green">"Express.js"</span>, <span class="text-accent-green">"Node.js"</span>],
+  <span class="text-accent-blue">"database"</span><span class="text-ink-mute">:</span> [<span class="text-accent-green">"SQL"</span>, <span class="text-accent-green">"MongoDB"</span>],
+  <span class="text-accent-blue">"tools"</span><span class="text-ink-mute">:</span> [<span class="text-accent-green">"AI Tools"</span>]
+<span class="text-ink-mute">}</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OFERTA ============ -->
+<section id="oferta" class="scroll-mt-24 py-24 lg:py-32 border-b border-line/60 bg-surface/40">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="max-w-2xl reveal">
+      <span class="font-mono text-xs uppercase tracking-wider text-accent-violet">// Oferta</span>
+      <h2 class="mt-3 font-display font-semibold text-3xl sm:text-4xl text-ink tracking-tight">W czym mogę pomóc Twojej firmie</h2>
+      <p class="mt-4 text-ink-dim">Trzy filary, na których buduję rozwiązania — od interfejsu, przez automatyzację, po dane.</p>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-6">
+      <div class="reveal group rounded-2xl border border-line bg-surface p-7 hover:border-accent-violet/50 hover:-translate-y-1 transition-all duration-300">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-violet/10 text-accent-violet">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l-6 7.5 6 7.5M15.75 4.5l6 7.5-6 7.5" />
+          </svg>
+        </div>
+        <div class="mt-5 font-mono text-[11px] uppercase tracking-wider text-ink-mute">service.web</div>
+        <h3 class="mt-2 font-display font-semibold text-lg text-ink">Aplikacje i strony WWW</h3>
+        <p class="mt-3 text-sm text-ink-dim leading-relaxed">Buduję responsywne aplikacje webowe i strony firmowe w React, HTML/CSS, Laravel oraz Express.js — od makiety po wdrożenie.</p>
+      </div>
+
+      <div class="reveal group rounded-2xl border border-line bg-surface p-7 hover:border-accent-violet/50 hover:-translate-y-1 transition-all duration-300">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-violet/10 text-accent-violet">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <rect x="5" y="7.5" width="14" height="10" rx="3" />
+            <path stroke-linecap="round" d="M12 4v3.5M5 12.5h-1.5M20.5 12.5H19M8 20.5h8M9.5 17v3M14.5 17v3" />
+            <circle cx="9.5" cy="12.5" r="1.1" fill="currentColor" stroke="none" />
+            <circle cx="14.5" cy="12.5" r="1.1" fill="currentColor" stroke="none" />
+          </svg>
+        </div>
+        <div class="mt-5 font-mono text-[11px] uppercase tracking-wider text-ink-mute">service.bots</div>
+        <h3 class="mt-2 font-display font-semibold text-lg text-ink">Tworzenie botów</h3>
+        <p class="mt-3 text-sm text-ink-dim leading-relaxed">Dedykowane boty Discord i Telegram, które automatyzują obsługę klienta, powiadomienia i codzienne zadania w Twojej firmie.</p>
+      </div>
+
+      <div class="reveal group rounded-2xl border border-line bg-surface p-7 hover:border-accent-violet/50 hover:-translate-y-1 transition-all duration-300">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-violet/10 text-accent-violet">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <ellipse cx="12" cy="6" rx="7.5" ry="3" />
+            <path stroke-linecap="round" d="M4.5 6v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3V6" />
+            <path stroke-linecap="round" d="M4.5 12v6c0 1.66 3.36 3 7.5 3s7.5-1.34 7.5-3v-6" />
+          </svg>
+        </div>
+        <div class="mt-5 font-mono text-[11px] uppercase tracking-wider text-ink-mute">service.data</div>
+        <h3 class="mt-2 font-display font-semibold text-lg text-ink">Przetwarzanie danych</h3>
+        <p class="mt-3 text-sm text-ink-dim leading-relaxed">Konwersja plików JSON/CSV, projektowanie baz danych SQL i MongoDB oraz web scraping dostarczający dokładnie te dane, których potrzebujesz.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section id="portfolio" class="scroll-mt-24 py-24 lg:py-32 border-b border-line/60">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="max-w-2xl reveal">
+      <span class="font-mono text-xs uppercase tracking-wider text-accent-violet">// Portfolio</span>
+      <h2 class="mt-3 font-display font-semibold text-3xl sm:text-4xl text-ink tracking-tight">Wybrane projekty</h2>
+      <p class="mt-4 text-ink-dim">Przeglądaj zdjęcia kolejno przyciskiem w każdej karcie. Obrazy są wyświetlane bez przycinania.</p>
+    </div>
+
+    <div class="mt-14 grid md:grid-cols-2 gap-8">
+      <div class="reveal portfolio-card group">
+        <div class="portfolio-shell rounded-2xl border border-line bg-surface overflow-hidden transition-all duration-300 hover:-translate-y-1">
+          <div class="flex items-center gap-2 border-b border-line bg-surface2 px-4 py-3">
+            <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+            <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+            <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+            <span class="ml-3 font-mono text-xs text-ink-mute">Remindri</span>
+          </div>
+          <div class="portfolio-empty p-4 sm:p-5">
+            <div class="portfolio-frame portfolio-frame--preview flex min-h-[320px] items-center justify-center rounded-2xl border border-line/80 p-4 sm:p-6">
+              <img id="portfolio-image-remindri" src="remindri/app1.jpg" alt="Remindri" class="portfolio-media max-h-[420px] w-full object-contain" loading="lazy" decoding="async">
+            </div>
+          </div>
+          <div class="flex flex-col gap-4 border-t border-line bg-surface2 p-4 sm:p-5">
+            <div>
+              <h3 class="font-display font-semibold text-lg text-ink">Remindri</h3>
+              <p class="mt-2 text-sm text-ink-dim leading-relaxed">Kliknij przycisk, aby przejść do kolejnego zdjęcia w kolejności plików.</p>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <span id="portfolio-counter-remindri" class="rounded-full border border-line bg-surface px-3 py-1 font-mono text-[11px] text-ink-mute">1 / 6</span>
+              <button type="button" data-portfolio-open="remindri" class="inline-flex items-center gap-2 rounded-full bg-accent-violet px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-accent-violet/90 hover:-translate-y-0.5">
+                Otwórz galerię
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal portfolio-card group">
+        <div class="portfolio-shell rounded-2xl border border-line bg-surface overflow-hidden transition-all duration-300 hover:-translate-y-1">
+          <div class="flex items-center gap-2 border-b border-line bg-surface2 px-4 py-3">
+            <span class="h-3 w-3 rounded-full bg-red-500/70"></span>
+            <span class="h-3 w-3 rounded-full bg-yellow-500/70"></span>
+            <span class="h-3 w-3 rounded-full bg-green-500/70"></span>
+            <span class="ml-3 font-mono text-xs text-ink-mute">Schronisko</span>
+          </div>
+          <div class="portfolio-empty p-4 sm:p-5">
+            <div class="portfolio-frame portfolio-frame--preview flex min-h-[320px] items-center justify-center rounded-2xl border border-line/80 p-4 sm:p-6">
+              <img id="portfolio-image-schronisko" src="shcronisko/web1.png" alt="Schronisko" class="portfolio-media max-h-[420px] w-full object-contain" loading="lazy" decoding="async">
+            </div>
+          </div>
+          <div class="flex flex-col gap-4 border-t border-line bg-surface2 p-4 sm:p-5">
+            <div>
+              <h3 class="font-display font-semibold text-lg text-ink">Schronisko</h3>
+              <p class="mt-2 text-sm text-ink-dim leading-relaxed">Kliknij przycisk, aby przejść do kolejnego zdjęcia w kolejności plików.</p>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <span id="portfolio-counter-schronisko" class="rounded-full border border-line bg-surface px-3 py-1 font-mono text-[11px] text-ink-mute">1 / 4</span>
+              <button type="button" data-portfolio-open="schronisko" class="inline-flex items-center gap-2 rounded-full bg-accent-violet px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-accent-violet/90 hover:-translate-y-0.5">
+                Otwórz galerię
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="gallery-modal" class="gallery-modal fixed inset-0 z-[100] flex items-center justify-center bg-black/85 px-4 py-6 sm:px-6 sm:py-8 backdrop-blur-md" aria-hidden="true">
+  <div class="gallery-modal-panel relative w-full max-w-7xl rounded-3xl border border-line bg-base shadow-2xl shadow-black/60 overflow-hidden">
+    <div class="flex items-center justify-between gap-4 border-b border-line bg-surface2 px-4 py-3 sm:px-5">
+      <div>
+        <p id="gallery-modal-title" class="font-display text-lg font-semibold text-ink">Galeria</p>
+        <p id="gallery-modal-counter" class="font-mono text-[11px] text-ink-mute">1 / 1</p>
+      </div>
+      <button type="button" id="gallery-modal-close" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink-dim transition-colors hover:border-accent-violet/60 hover:text-accent-violet" aria-label="Zamknij galerię">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+    <div class="grid gap-0 lg:grid-cols-[1fr_18rem]">
+      <div class="flex items-center justify-center bg-black/30 p-4 sm:p-6 lg:p-8">
+        <img id="gallery-modal-image" src="" alt="" class="gallery-modal-image w-full object-contain" decoding="async">
+      </div>
+      <div class="border-t border-line bg-surface2 p-4 sm:p-5 lg:border-t-0 lg:border-l">
+        <h3 id="gallery-modal-project" class="font-display text-2xl font-semibold text-ink">Projekt</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-dim">Klikaj dalej, żeby przechodzić po zdjęciach w pełnym ekranie.</p>
+        <div class="mt-6 flex items-center gap-3">
+          <button type="button" id="gallery-modal-prev" class="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-line bg-surface px-4 py-3 text-sm font-semibold text-ink transition-colors hover:border-accent-violet/60 hover:text-accent-violet">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            Poprzednie
+          </button>
+          <button type="button" id="gallery-modal-next" class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-accent-violet px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-violet/90">
+            Następne
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ KONTAKT ============ -->
+<section id="kontakt" class="scroll-mt-24 py-24 lg:py-32">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 grid lg:grid-cols-[0.8fr_1fr] gap-16">
+    <div class="reveal">
+      <span class="font-mono text-xs uppercase tracking-wider text-accent-violet">// Kontakt</span>
+      <h2 class="mt-3 font-display font-semibold text-3xl sm:text-4xl text-ink tracking-tight">Porozmawiajmy o Twoim projekcie</h2>
+      <p class="mt-4 text-ink-dim leading-relaxed">Opisz krótko, czego potrzebujesz — odpowiadam zwykle w ciągu 24 godzin z pierwszymi pomysłami na rozwiązanie.</p>
+
+      <div class="mt-8 flex items-center gap-4">
+        <a href="#" aria-label="LinkedIn" class="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink-dim hover:border-accent-violet/60 hover:text-accent-violet transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        </a>
+        <a href="#" aria-label="GitHub" class="flex h-11 w-11 items-center justify-center rounded-full border border-line text-ink-dim hover:border-accent-violet/60 hover:text-accent-violet transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.48 2 2 6.58 2 12.2c0 4.5 2.87 8.32 6.84 9.67.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.46-1.19-1.11-1.51-1.11-1.51-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 5 0c1.9-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.03 10.03 0 0 0 22 12.2C22 6.58 17.52 2 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <form id="contact-form" class="reveal space-y-5 rounded-2xl border border-line bg-surface p-6 sm:p-8">
+      <div>
+        <label for="name" class="block font-mono text-xs uppercase tracking-wider text-ink-mute mb-2">Imię</label>
+        <input id="name" name="name" type="text" required placeholder="Jak mam się do Ciebie zwracać?" class="w-full rounded-lg border border-line bg-surface2 px-4 py-3 text-sm text-ink placeholder:text-ink-mute focus:outline-none focus:ring-2 focus:ring-accent-violet/60 focus:border-accent-violet/60 transition-colors">
+      </div>
+      <div>
+        <label for="email" class="block font-mono text-xs uppercase tracking-wider text-ink-mute mb-2">Email</label>
+        <input id="email" name="email" type="email" required placeholder="ty@firma.pl" class="w-full rounded-lg border border-line bg-surface2 px-4 py-3 text-sm text-ink placeholder:text-ink-mute focus:outline-none focus:ring-2 focus:ring-accent-violet/60 focus:border-accent-violet/60 transition-colors">
+      </div>
+      <div>
+        <label for="message" class="block font-mono text-xs uppercase tracking-wider text-ink-mute mb-2">Wiadomość</label>
+        <textarea id="message" name="message" rows="5" required placeholder="Opowiedz mi o swoim projekcie..." class="w-full resize-none rounded-lg border border-line bg-surface2 px-4 py-3 text-sm text-ink placeholder:text-ink-mute focus:outline-none focus:ring-2 focus:ring-accent-violet/60 focus:border-accent-violet/60 transition-colors"></textarea>
+      </div>
+      <button type="submit" id="submit-btn" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-accent-violet px-6 py-3.5 text-sm font-semibold text-white hover:bg-accent-violet/90 transition-colors shadow-lg shadow-accent-violet/20">
+        <span id="submit-text">Wyślij wiadomość</span>
+      </button>
+      <p id="form-success" class="hidden text-center text-sm text-accent-green font-mono">✓ Dziękuję! Odezwę się najszybciej jak to możliwe.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-line/60 py-10">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+    <p class="font-mono text-xs text-ink-mute">© 2026 Freelance Developer. Wszelkie prawa zastrzeżone.</p>
+    <p class="font-mono text-xs text-ink-mute">Zbudowano z użyciem HTML, Tailwind CSS i odrobiny automatyzacji.</p>
+  </div>
+</footer>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealEls = document.querySelectorAll('.reveal');
+
+  function forceRevealAll() {
+    revealEls.forEach((el) => el.classList.add('is-visible'));
+  }
+
+  // ---------- Portfolio stepper ----------
+  try {
+    const portfolioSets = {
+      remindri: {
+        images: ['app1.jpg', 'app22.jpg', 'app3.jpg', 'app4.jpg', 'app5.jpg', 'app6.jpg'],
+        imageId: 'portfolio-image-remindri',
+        counterId: 'portfolio-counter-remindri',
+        folder: 'remindri/',
+        title: 'Remindri',
+      },
+      schronisko: {
+        images: ['web1.png', 'web2.png', 'web3.png', 'web4.png'],
+        imageId: 'portfolio-image-schronisko',
+        counterId: 'portfolio-counter-schronisko',
+        folder: 'shcronisko/',
+        title: 'Schronisko',
+      },
+    };
+
+    const modal = document.getElementById('gallery-modal');
+    const modalImage = document.getElementById('gallery-modal-image');
+    const modalTitle = document.getElementById('gallery-modal-title');
+    const modalCounter = document.getElementById('gallery-modal-counter');
+    const modalProject = document.getElementById('gallery-modal-project');
+    const modalClose = document.getElementById('gallery-modal-close');
+    const modalPrev = document.getElementById('gallery-modal-prev');
+    const modalNext = document.getElementById('gallery-modal-next');
+    let activeGalleryKey = null;
+    let activeIndex = 0;
+
+    const updateModal = () => {
+      const set = activeGalleryKey ? portfolioSets[activeGalleryKey] : null;
+      if (!set || !modalImage || !modalCounter || !modalTitle || !modalProject) return;
+      const nextSrc = `${set.folder}${set.images[activeIndex]}`;
+      const nextAlt = `${set.title} - ${activeIndex + 1}`;
+
+      modalImage.classList.add('is-changing');
+      window.setTimeout(() => {
+        modalImage.src = nextSrc;
+        modalImage.alt = nextAlt;
+        modalCounter.textContent = `${activeIndex + 1} / ${set.images.length}`;
+        modalTitle.textContent = set.title;
+        modalProject.textContent = set.title;
+        window.requestAnimationFrame(() => {
+          modalImage.classList.remove('is-changing');
+        });
+      }, prefersReducedMotion ? 0 : 160);
+    };
+
+    const openModal = (key) => {
+      activeGalleryKey = key;
+      activeIndex = 0;
+      updateModal();
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeModal = () => {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+
+    Object.entries(portfolioSets).forEach(([key, set]) => {
+      const imageEl = document.getElementById(set.imageId);
+      const counterEl = document.getElementById(set.counterId);
+      const button = document.querySelector(`[data-portfolio-open="${key}"]`);
+
+      if (!imageEl || !counterEl || !button) {
+        return;
+      }
+
+      const updateSlide = () => {
+        imageEl.src = `${set.folder}${set.images[0]}`;
+        counterEl.textContent = `1 / ${set.images.length}`;
+        imageEl.style.opacity = '1';
+      };
+
+      updateSlide();
+
+      button.addEventListener('click', () => openModal(key));
+    });
+
+    modalPrev?.addEventListener('click', () => {
+      if (!activeGalleryKey) return;
+      const set = portfolioSets[activeGalleryKey];
+      activeIndex = (activeIndex - 1 + set.images.length) % set.images.length;
+      updateModal();
+    });
+
+    modalNext?.addEventListener('click', () => {
+      if (!activeGalleryKey) return;
+      const set = portfolioSets[activeGalleryKey];
+      activeIndex = (activeIndex + 1) % set.images.length;
+      updateModal();
+    });
+
+    modalClose?.addEventListener('click', closeModal);
+    modal?.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (!modal.classList.contains('is-open')) return;
+      if (event.key === 'Escape') closeModal();
+      if (event.key === 'ArrowLeft') modalPrev?.click();
+      if (event.key === 'ArrowRight') modalNext?.click();
+    });
+  } catch (err) {
+    console.error('Portfolio slideshow error:', err);
+  }
+
+  // ---------- Terminal typing effect ----------
+  try {
+    const terminalLines = [
+      { text: '$ npm run analiza -- --klient="Twoja-Firma"', cls: 'text-ink-dim' },
+      { text: '✓ Wymagania przeanalizowane', cls: 'text-accent-green' },
+      { text: '$ npm run build', cls: 'text-ink-dim' },
+      { text: '✓ Aplikacja zbudowana bez błędów', cls: 'text-accent-green' },
+      { text: '$ deploy --env=production', cls: 'text-ink-dim' },
+      { text: '✓ Wdrożono pomyślnie', cls: 'text-accent-green' },
+      { text: '> status: online', cls: 'text-accent-blue' },
+    ];
+
+    const terminalEl = document.getElementById('terminal-output');
+
+    function renderStaticTerminal() {
+      terminalEl.innerHTML = terminalLines.map((line) => `<div class="${line.cls}">${line.text}</div>`).join('');
+    }
+
+    function typeTerminal() {
+      let lineIndex = 0;
+      terminalEl.innerHTML = '';
+
+      function typeLine() {
+        if (lineIndex >= terminalLines.length) {
+          const cursor = document.createElement('span');
+          cursor.className = 'terminal-cursor';
+          terminalEl.appendChild(cursor);
+          return;
+        }
+
+        const line = terminalLines[lineIndex];
+        const div = document.createElement('div');
+        div.className = line.cls;
+        terminalEl.appendChild(div);
+
+        let charIndex = 0;
+        const interval = setInterval(() => {
+          div.textContent = line.text.slice(0, charIndex + 1);
+          charIndex++;
+
+          if (charIndex >= line.text.length) {
+            clearInterval(interval);
+            lineIndex++;
+            setTimeout(typeLine, 200);
+          }
+        }, 22);
+      }
+
+      typeLine();
+    }
+
+    if (terminalEl) {
+      prefersReducedMotion ? renderStaticTerminal() : typeTerminal();
+    }
+  } catch (err) {
+    console.error('Terminal effect error:', err);
+  }
+
+  // ---------- Scroll reveal ----------
+  try {
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      forceRevealAll();
+    } else {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      revealEls.forEach((el) => observer.observe(el));
+    }
+  } catch (err) {
+    console.error('Reveal effect error:', err);
+    forceRevealAll();
+  }
+
+  // ---------- Contact form ----------
+  try {
+    const form = document.getElementById('contact-form');
+    const submitText = document.getElementById('submit-text');
+    const formSuccess = document.getElementById('form-success');
+
+    if (form && submitText && formSuccess) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        submitText.textContent = 'Wysyłanie...';
+        setTimeout(() => {
+          submitText.textContent = 'Wysłano ✓';
+          formSuccess.classList.remove('hidden');
+          form.reset();
+
+          setTimeout(() => {
+            submitText.textContent = 'Wyślij wiadomość';
+            formSuccess.classList.add('hidden');
+          }, 4000);
+        }, 700);
+      });
+    }
+  } catch (err) {
+    console.error('Contact form error:', err);
+  }
+</script>
+
+</body>
+</html>
